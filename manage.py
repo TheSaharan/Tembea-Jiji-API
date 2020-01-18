@@ -3,6 +3,7 @@
 import os
 import sys
 
+import dotenv
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tembea_jiji.settings')
@@ -18,4 +19,5 @@ def main():
 
 
 if __name__ == '__main__':
+    dotenv.read_dotenv() #load env filess
     main()
