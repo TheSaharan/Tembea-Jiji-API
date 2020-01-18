@@ -2,31 +2,38 @@ from django.db import models
 
 from django.utils.translation import ugettext as _
 
-class Route(models.Model):
-    route_number = models.CharField(max_length=5, blank=False, null=False)
-
-    def __str__(self):
-        return self.route_number
-
-    class Meta:
-        ordering = ('route_number'),
-
 
 class BusStop(models.Model):
-    route = models.ForeignKey('Route', on_delete=models.CASCADE)
     stop_name = models.CharField(max_length=200, blank=False, null=False)
     lat = models.FloatField(_('Latitude'), blank=False, null=False)
     lon = models.FloatField(_('Longitude'), blank=False, null=False)
 
     def __str__(self):
-        return "stop: {} for Matatu route number: {}".format(self.stop_name, self.route.route_number)
+        return "Bus stop at: {}".format(self.stop_name)
+
+    class Meta:
+        ordering = ('stop_name'),
 
 
 class Stage(models.Model):
-    route = models.ForeignKey('Route', on_delete=models.CASCADE)
     stage_name = models.CharField(max_length=200, blank=False, null=False)
     lat = models.FloatField(_('Latitude'), blank=False, null=False)
     lon = models.FloatField(_('Longitude'), blank=False, null=False)
 
     def __str__(self):
-        return "Stage: {} for Matatu route number: {}".format(self.stage_name, self.route.route_number)
+        return "Stage: {} ".format(self.stage_name)
+
+    class Meta:
+        ordering = ('stage_name'),
+
+
+class Route(models.Model):
+    name = models.CharField(max_length=5, blank=False, null=False)
+    stops = models.ManyToManyField(BusStop)
+    stages = models.ManyToManyField(Stage)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ('name'),
